@@ -8,4 +8,4 @@ const fib = function (n) {
   }
   return result[n];
 };
-console.log(fib(5));
+console.log(fib(9));
