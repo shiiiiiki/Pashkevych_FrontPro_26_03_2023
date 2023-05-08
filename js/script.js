@@ -8,6 +8,7 @@ const calculator = {
 
     if (isNaN(this.num1) || isNaN(this.num2)) {
       alert("One or both of the inputs are not numbers");
+      this.read();
     }
   },
   sum: function () {
