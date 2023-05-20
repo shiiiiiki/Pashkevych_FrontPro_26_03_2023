@@ -1,18 +1,35 @@
 "use strict";
-const randomNumber = () => {
-  const arr = [];
-  const number = () => {
-    const num = Math.floor(Math.random() * 100) + 1;
-    if (arr.indexOf(num) !== -1) {
-      return number();
-    } else {
-      arr.push(num);
-      return num;
-    }
+const counter = (number = 0) => {
+  let count = number;
+  let increaseCount = 0;
+  let decreaseCount = 0;
+  let valueCount = 0;
+
+  return {
+    increase() {
+      count++;
+      increaseCount++;
+    },
+    decrease() {
+      count--;
+      decreaseCount++;
+    },
+    value() {
+      valueCount++;
+      return count;
+    },
+    getStatistic() {
+      return {
+        increaseCount,
+        decreaseCount,
+        valueCount,
+      };
+    },
+    reset() {
+      count = 0;
+      increaseCount = 0;
+      decreaseCount = 0;
+      valueCount = 0;
+    },
   };
-  return number;
 };
-const getNum = randomNumber();
-console.log(getNum());
-console.log(getNum());
-console.log(getNum());
