@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul id="data-list"></ul>
+
+<script>
+    "use strict";
+    (function () {
+        const DATA_KEY = "DATA_KEY";
+        const data = JSON.parse(localStorage.getItem(DATA_KEY));
+
+        const generateList = function () {
+            const list = document.getElementById("data-list");
+            list.innerHTML = "";
+            if (data) {
+                Object.entries(data).forEach(([key, value]) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${key}: ${value}`;
+                    list.appendChild(listItem);
+                });
+            } else {
+                const message = document.createElement("li");
+                message.textContent = "No stored data found.";
+                list.appendChild(message);
+            }
+        };
+
+        const generatedList = generateList();
+        document.addEventListener("DOMContentLoaded", generatedList);
+    })();
+</script>
+</body>
+</html>
