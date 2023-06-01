@@ -8,6 +8,43 @@
 </head>
 <body>
 <main>
+    <div class="container-color-scheme" style="margin: 40px; display: inline-block; width: 500px">
+        <h1>Выбор цветовой схемы</h1>
+        <form>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="colorScheme" id="lightScheme" value="light" checked>
+                <label class="form-check-label" for="lightScheme">Светлая</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="colorScheme" id="darkScheme" value="dark">
+                <label class="form-check-label" for="darkScheme">Темная</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="colorScheme" id="sunnyScheme" value="sunny">
+                <label class="form-check-label" for="darkScheme">Солнечная</label>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h1>Избранное</h1>
+        <h2>Фильмы:</h2>
+        <ul id="movies-list">
+            <li>
+                <span>Побег из Шоушенка</span>
+                <button class="favorite-button">Добавить в избранное</button>
+            </li>
+            <li>
+                <span>Зеленая миля</span>
+                <button class="favorite-button">Добавить в избранное</button>
+            </li>
+            <li>
+                <span>Форрест Гамп</span>
+                <button class="favorite-button">Добавить в избранное</button>
+            </li>
+        </ul>
+        <h2>Избранные фильмы:</h2>
+        <ul id="favorites-list"></ul>
+    </div>
     <div class="container">
         <div class="row">
             <h1 class="text-center mb-5 mt-5">
