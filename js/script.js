@@ -84,6 +84,7 @@
 
       favoriteMovies.forEach(function (movieName) {
         const listItem = document.createElement("li");
+        listItem.style.margin = "10px";
         const movieNameSpan = document.createElement("span");
         movieNameSpan.textContent = movieName;
         const favoriteButton = document.createElement("button");
