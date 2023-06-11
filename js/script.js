@@ -2,6 +2,7 @@
 
 (function () {
   const form = document.querySelector("#todoForm");
+  const container = document.querySelector("#todoItems");
   const DATA_KEY = "to-do-items";
   let currentID = 1;
 
@@ -20,14 +21,14 @@
   const postData = (data) => {
     const existingData = getData();
 
-    const dataToSave = JSON.parse(JSON.stringify(data));
+    const dataToSave = structuredClone(data);
     dataToSave.id = currentID;
     existingData.push(dataToSave);
 
     try {
       localStorage.setItem(DATA_KEY, JSON.stringify(existingData));
     } catch (error) {
-      console.log(error);
+      console.dir(error);
       throw new Error(error);
     }
 
@@ -35,6 +36,22 @@
     currentID += 1;
 
     return savedItem;
+  };
+
+  const deleteData = (id) => {
+    let data = getData();
+    if (!data.length) {
+      return;
+    }
+    data = data.filter((item) => item.id !== id);
+
+    try {
+      localStorage.setItem(DATA_KEY, JSON.stringify(data));
+    } catch (error) {
+      throw new Error(error);
+    }
+
+    return !getData().find((item) => item.id === id);
   };
 
   form.addEventListener("submit", (e) => {
@@ -49,44 +66,69 @@
       {}
     );
     const dataToSave = postData(data);
-    renderData(dataToSave.title, dataToSave.description);
+    const itemToRender = createTemplate(dataToSave);
+    renderItem(itemToRender);
   });
 
-  const renderData = (titleText = "", descriptionText = "") => {
-    const template = createTemplate(titleText, descriptionText);
-    document.querySelector("#todoItems").prepend(template);
+  const createTemplate = ({ title, description, id, completed }) => {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("col-4");
+    wrapper.setAttribute("data-id", id);
+
+    let wrapInnerContent = '<div class="taskWrapper">';
+    wrapInnerContent += `<div class="taskHeading">${title}</div>`;
+    wrapInnerContent += `<div class="taskDescription">${description}</div>`;
+    wrapInnerContent += "<hr>";
+    wrapInnerContent += '<label class="completed form-check">';
+    wrapInnerContent += `<input data-item-id="${id}" type="checkbox" class="form-check-input" >`;
+    wrapInnerContent += "<span>Complited?</span>";
+    wrapInnerContent += "</label>";
+    wrapInnerContent += "<hr>";
+    wrapInnerContent += `<button class="btn btn-danger" data-remove-btn data-item-id="${id}">Remove Task!</button>`;
+    wrapInnerContent += "</div>";
+
+    wrapper.innerHTML = wrapInnerContent;
+
+    wrapper.querySelector("input[type=checkbox]").checked = completed;
+
+    return wrapper;
   };
 
-  const createTemplate = (titleText = "", descriptionText = "") => {
-    const mainWrap = document.createElement("div");
-    mainWrap.className = "col-4";
-
-    const wrap = document.createElement("div");
-    wrap.className = "taskWrapper";
-    mainWrap.append(wrap);
-
-    const title = document.createElement("div");
-    title.innerHTML = titleText;
-    title.className = "taskHeading";
-    wrap.append(title);
-
-    const description = document.createElement("div");
-    description.innerHTML = descriptionText;
-    description.className = "taskDescription";
-    wrap.append(description);
-
-    const removeButton = document.createElement("button");
-    removeButton.innerText = "Remove Task!";
-    removeButton.className = "btn btn-danger";
-    wrap.append(removeButton);
-
-    return mainWrap;
+  const renderItem = (DOMel) => {
+    if (!(DOMel instanceof HTMLElement)) {
+      throw new Error("Valid DOM Element needed");
+    }
+    container.prepend(DOMel);
   };
 
-  window.addEventListener("load", () => {
-    const savedData = getData();
-    if (savedData.length > 0) {
-      savedData.forEach((item) => renderData(item.title, item.description));
+  container.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!e.target.hasAttribute("data-remove-btn")) {
+      return;
+    }
+    const todoItem = e.target.closest("[data-id]");
+    const id = Number(todoItem.getAttribute("data-id"));
+    if (deleteData(id)) {
+      todoItem.remove();
     }
   });
+
+  // const removeAllData = document.querySelector(".remove-all");
+  // removeAllData.addEventListener("click", (e) => {
+  //   e.stopPropagation();
+  //
+  //   localStorage.removeItem(DATA_KEY);
+  // });
+
+  const preRenderTodos = () => {
+    document.removeEventListener("DOMContentLoaded", preRenderTodos);
+    const data = getData();
+    if (!data.length) {
+      return;
+    }
+    currentID = data.at(-1).id;
+    data.forEach((item) => renderItem(createTemplate(item)));
+  };
+
+  document.addEventListener("DOMContentLoaded", preRenderTodos);
 })();
