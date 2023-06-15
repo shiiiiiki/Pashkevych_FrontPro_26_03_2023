@@ -113,12 +113,12 @@
     }
   });
 
-  // const removeAllData = document.querySelector(".remove-all");
-  // removeAllData.addEventListener("click", (e) => {
-  //   e.stopPropagation();
-  //
-  //   localStorage.removeItem(DATA_KEY);
-  // });
+  const removeAllData = document.querySelector(".remove-all");
+  removeAllData.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    localStorage.removeItem(DATA_KEY);
+  });
 
   const preRenderTodos = () => {
     document.removeEventListener("DOMContentLoaded", preRenderTodos);
