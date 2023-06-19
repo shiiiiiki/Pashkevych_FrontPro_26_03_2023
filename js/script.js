@@ -68,6 +68,7 @@
     const dataToSave = postData(data);
     const itemToRender = createTemplate(dataToSave);
     renderItem(itemToRender);
+    e.target.reset();
   });
 
   const createTemplate = ({ title, description, id, completed }) => {
@@ -118,6 +119,7 @@
     e.stopPropagation();
 
     localStorage.removeItem(DATA_KEY);
+    container.innerHTML = "";
   });
 
   const preRenderTodos = () => {
