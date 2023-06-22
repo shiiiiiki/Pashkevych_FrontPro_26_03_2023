@@ -1,84 +1,88 @@
 "use strict";
+(function () {
+  function Student(name, surname, bYear, lesCounter = 10) {
+    this.name = name;
+    this.surname = surname;
+    this.yearOfBirth = bYear;
+    this.studentAttendance = new Array(lesCounter);
+    this.studentMark = new Array(lesCounter);
+    this.lesCounter = lesCounter;
+    this.currentLes = 1;
 
-function Student(name, surname, bYear) {
-  this.name = name;
-  this.surname = surname;
-  this.yearOfBirth = bYear;
-  this.studentAttendance = [];
-  this.studentMark = [];
+    Student.prototype.getAge = function () {
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - this.yearOfBirth;
+      console.log(age);
+    };
 
-  Student.prototype.getAge = function () {
-    const currentYear = new Date().getFullYear();
-    const age = currentYear - this.yearOfBirth;
-    console.log(age);
-  };
+    Student.prototype.setAttendance = function (attended, nextLes = true) {
+      if (this.lesCounter === this.currentLes) {
+        return;
+      }
+      this.studentAttendance[this.currentLes - 1] = attended;
+      nextLes ? (this.currentLes += 1) : null;
+    };
 
-  Student.prototype.mark = function (currentMark) {
-    this.studentMark.unshift(currentMark);
-    this.studentMark = this.studentMark.slice(0, 10);
-    return this.studentMark;
-  };
+    Student.prototype.mark = function (currentMark) {
+      if (!this.validMark(currentMark)) {
+        return;
+      }
+      this.studentMark[this.currentLes - 1] = currentMark;
+    };
 
-  Student.prototype.present = function () {
-    this.studentAttendance.unshift(true);
-    this.studentAttendance = this.studentAttendance.slice(0, 10);
-    return this.studentAttendance;
-  };
+    Student.prototype.validMark = function (currentMark) {
+      if (currentMark >= 0 && currentMark <= 10) {
+        return true;
+      }
+      console.warn("Not valid mark");
+      return false;
+    };
 
-  Student.prototype.absent = function () {
-    this.studentAttendance.unshift(false);
-    this.studentAttendance = this.studentAttendance.slice(0, 10);
-    return this.studentAttendance;
-  };
+    Student.prototype.present = function (currentMark = null) {
+      if (currentMark !== null && !this.validMark(currentMark)) {
+        return;
+      }
+      this.setAttendance(true, currentMark === null);
 
-  Student.prototype.countAverage = function (array) {
-    const cutArray = array.slice(0, 10);
-    const sum = cutArray.reduce((acc, value) => acc + value, 0);
-    const average = cutArray.length > 0 ? sum / cutArray.length : 0;
-    return average;
-  };
+      if (currentMark !== null) {
+        this.mark(currentMark);
+        this.currentLes += 1;
+      }
+    };
 
-  Student.prototype.summary = function () {
-    const averageMark = this.countAverage(this.studentMark);
-    const averageAttendance = this.countAverage(this.studentAttendance);
+    Student.prototype.absent = function () {
+      this.setAttendance(false);
+    };
 
-    if (averageMark > 9 && averageAttendance > 0.9) {
-      return "Ути какой молодчинка!";
-    } else if (averageMark < 9 || averageAttendance < 0.9) {
-      return "Норм, но можно лучше";
-    } else {
-      return "Редиска!";
-    }
-  };
-}
+    Student.prototype.countAverage = function (array) {
+      const cutArray = array.slice(0, 10);
+      const sum = cutArray.reduce((acc, value) => acc + value, 0);
+      const average = cutArray.length > 0 ? sum / cutArray.length : 0;
+      return average;
+    };
 
-let student1 = new Student("Andrew", "Andreevich", 1998);
-student1.getAge();
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.mark(10);
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.present();
-student1.absent();
-student1.absent();
-student1.absent();
-student1.absent();
-student1.absent();
+    Student.prototype.summary = function () {
+      const averageMark = this.countAverage(this.studentMark);
+      const averageAttendance = this.countAverage(this.studentAttendance);
 
-console.log(student1);
+      if (averageMark > 9 && averageAttendance > 0.9) {
+        return "Ути какой молодчинка!";
+      } else if (averageMark < 9 || averageAttendance < 0.9) {
+        return "Норм, но можно лучше";
+      } else {
+        return "Редиска!";
+      }
+    };
+  }
 
-console.log(student1.summary());
+  let student1 = new Student("Andrew", "Andreevich", 1998);
+  student1.getAge();
+  student1.present(2);
+  student1.present(2);
+  student1.absent();
+  student1.absent();
+
+  console.log(student1);
+
+  console.log(student1.summary());
+})();
