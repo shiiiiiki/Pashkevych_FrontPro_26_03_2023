@@ -23,8 +23,8 @@
     "prettier": "^2.8.7"
   },
   "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
     "lodash": "^4.17.21"
   }
 }
-
-
