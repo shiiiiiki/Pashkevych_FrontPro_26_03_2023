@@ -6,10 +6,7 @@
       priceMap.set(item, price);
     });
 
-    const totalPrice = Array.from(priceMap.values()).reduce(
-      (acc, price) => acc + price,
-      0
-    );
+    const totalPrice = Array.from(priceMap.values()).reduce((acc, price) => acc + price, 0);
     return totalPrice;
   };
 
