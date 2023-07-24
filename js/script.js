@@ -22,17 +22,13 @@
 
     calculatePrice() {
       const toppingPrice = this.toppings.reduce(
-        (total, topping) => total + topping.price,
-        0
-      );
+        (total, topping) => total + topping.price, 0);
       return this.size.price + this.stuffing.price + toppingPrice;
     }
 
     calculateCalories() {
       const toppingCalories = this.toppings.reduce(
-        (total, topping) => total + topping.calories,
-        0
-      );
+        (total, topping) => total + topping.calories, 0);
       return this.size.calories + this.stuffing.calories + toppingCalories;
     }
   }
