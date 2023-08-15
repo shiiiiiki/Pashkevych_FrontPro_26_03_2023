@@ -5,9 +5,7 @@ import Card from "./components/Card";
 function App() {
   return (
     <div className="App">
-      <Card title="title" />
-      <Card text="text text text" />
-      <Card title="title" text="+ text" />
+      <Card />
     </div>
   );
 }
